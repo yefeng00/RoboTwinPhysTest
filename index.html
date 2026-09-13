@@ -93,6 +93,20 @@
     .chip { background:var(--main-tint); color:var(--main-dark); border:1px solid #ddd0f5;
       font-size:.82rem; font-weight:600; padding:5px 14px; border-radius:999px; }
 
+    /* ---------- 叙述性正文 ---------- */
+    .prose { max-width:900px; }
+    .prose p { line-height:1.85; margin-bottom:14px; color:#334155; }
+    .prose b, .prose strong { color:var(--ink); }
+    .kicker { font-size:.78rem; font-weight:800; letter-spacing:.14em; color:var(--main); text-transform:uppercase; margin-bottom:8px; }
+    .abstract-box { background:var(--main-tint); border-left:4px solid var(--main); border-radius:0 12px 12px 0;
+      padding:22px 26px; max-width:920px; margin:0 auto; text-align:left; line-height:1.85; color:#334155; }
+    .schema { background:#f7f6fb; border:1px solid #e9e6f2; border-radius:10px; padding:14px 18px;
+      font-family:ui-monospace,Menlo,monospace; font-size:.8rem; overflow-x:auto; white-space:nowrap; color:#475569; }
+    .obs-list { max-width:820px; margin:20px auto 0; text-align:left; line-height:1.8; color:#334155; }
+    .obs-list li { margin-bottom:10px; }
+    table.detail th, table.detail td { text-align:left; font-size:.86rem; line-height:1.55; }
+    table.detail td:first-child { font-weight:600; white-space:nowrap; }
+
     /* ---------- Citation ---------- */
     .cite-wrap { position:relative; }
     .cite-wrap pre { background:#f7f6fb; border:1px solid #e9e6f2; border-radius:10px; padding:16px; font-size:.85rem; overflow-x:auto; }
@@ -109,10 +123,11 @@
   <div class="topnav-inner">
     <span class="brand">RoboTwin-<em>Phys</em></span>
     <nav>
-      <a href="#teaser">Teaser</a>
-      <a href="#factors">Factors</a>
-      <a href="#results">Results</a>
+      <a href="#motivation">Motivation</a>
+      <a href="#factors">Benchmark</a>
+      <a href="#results">Failures</a>
       <a href="#dataset">Dataset</a>
+      <a href="#evaluation">Evaluation</a>
       <a href="#leaderboard">Leaderboard</a>
       <a href="#citation">Citation</a>
     </nav>
@@ -128,23 +143,20 @@
           <div class="column has-text-centered">
             <h1 class="title is-1 publication-title">RoboTwin-Phys</h1>
             <div class="is-size-5 publication-authors">
-              <span class="author-block">Jiaqi Zhang,</span>
-              <span class="author-block">Feng Ye<sup>†</sup>,</span>
-              <span class="author-block">Mingjia Yang,</span>
-              <span class="author-block">Zhihong Chen,</span>
-              <span class="author-block">Mingkang Xiang,</span>
-              <span class="author-block">Xinglin Yao,</span>
-              <span class="author-block">Chuanmin Jia<sup>‡</sup>,</span>
-              <span class="author-block">Siwei Ma</span>
+              <span class="author-block">Jiaqi Zhang<sup>1,2,3</sup>,</span>
+              <span class="author-block">Feng Ye<sup>1,†</sup>,</span>
+              <span class="author-block">Mingjia Yang<sup>1</sup>,</span>
+              <span class="author-block">Zhihong Chen<sup>1</sup>,</span>
+              <span class="author-block">Mingkang Xiang<sup>1</sup>,</span>
+              <span class="author-block">Xinglin Yao<sup>1</sup>,</span>
+              <span class="author-block">Siwei Ma<sup>1</sup>,</span>
+              <span class="author-block">Chuanmin Jia<sup>1,‡</sup></span>
             </div>
             <div class="is-size-6 publication-authors" style="margin-top:6px;color:#94a3b8">
               <span class="eql-cntrb"><small><sup>†</sup>Project Lead &nbsp;&nbsp; <sup>‡</sup>Corresponding Author</small></span>
             </div>
             <div class="is-size-6 publication-authors" style="margin-top:2px;color:#64748b">
-              <span class="author-block">Peking University &nbsp;·&nbsp; Advanced Institute of Information Technology, Peking University &nbsp;·&nbsp; Memo</span>
-            </div>
-            <div style="margin:12px auto 2px; max-width:230px">
-              <img src="logo.png" alt="Peking University & Memo" style="width:100%; display:block">
+              <span class="author-block"><sup>1</sup>Peking University &nbsp;&nbsp; <sup>2</sup>Advanced Institute of Information Technology, Peking University &nbsp;&nbsp; <sup>3</sup>Memo</span>
             </div>
             <p class="subtitle is-5" style="margin-top:12px">
               What happens to robot policies when the <b>physics</b> of the world changes?<br>
@@ -180,7 +192,7 @@
               <div class="stat"><div class="stat-num">50</div><div class="stat-label">tasks</div></div>
               <div class="stat"><div class="stat-num">30K+</div><div class="stat-label">labeled clips</div></div>
               <div class="stat"><div class="stat-num">250Hz</div><div class="stat-label">contact-force logs</div></div>
-              <div class="stat"><div class="stat-num">2</div><div class="stat-label">injection modes</div></div>
+              <div class="stat"><div class="stat-num">5</div><div class="stat-label">signals per episode</div></div>
             </div>
           </div>
         </div>
@@ -188,32 +200,59 @@
     </div>
   </section>
 
-  <!-- ================= TEASER: 4 factor slider cards ================= -->
-  <section class="hero teaser" id="teaser">
+  <!-- ================= ABSTRACT ================= -->
+  <section class="section hero is-light" id="abstract" style="padding-top:2.6rem">
     <div class="container is-max-desktop">
-      <div class="hero-body" style="padding-top:0">
-        <h2 class="title is-4 has-text-centered">Physics is not a constant</h2>
-        <p class="has-text-centered" style="max-width:820px;margin:0 auto 8px">
-          Robot policies are trained assuming the world's physics stays fixed.
-          Drag the sliders below — <b>same scene, same action, only one physical factor changes each time</b> —
-          and watch outcomes diverge. If physics matters this much, we should measure it.
-        </p>
-        <div class="factor-grid" id="factorGrid"></div>
-        <p class="has-text-centered muted" style="font-size:0.85rem">
-          Each card is one physical factor; each slider runs three levels from the default outward.
-        </p>
+      <div class="kicker has-text-centered">Abstract</div>
+      <div class="abstract-box">
+        Manipulation benchmarks randomize what the world <em>looks like</em> — backgrounds, lighting,
+        clutter — but keep what the world <em>is like</em> fixed: friction, mass, restitution,
+        gravity-aligned tables, and calibrated cameras are hard-coded constants. <b>RoboTwin-Phys</b>
+        turns the world's physical parameters into <b>controllable, labelable variables</b>. Across
+        <b>13 physical factors</b> on <b>50 bimanual tasks</b>, we build tiered perturbation
+        configurations with measured failure envelopes, fixed-seed paired evaluation, and per-episode
+        ground truth: exact physics values, contact-force logs at 250&nbsp;Hz, object kinematics at
+        50&nbsp;Hz, and failure timelines. The failure cases it produces — grasp slips, in-grasp
+        topples, bounce-outs, stuck drawers — are failures that current benchmarks simply never
+        produce. RoboTwin-Phys provides the code, configs, protocol, and data to measure them,
+        together with a public leaderboard reporting success-rate deltas against paired no-drift
+        baselines.
       </div>
     </div>
   </section>
 
-  <!-- ================= LEAD（压缩版 Abstract） ================= -->
-  <section class="section hero is-light">
-    <div class="container is-max-desktop has-text-centered">
-      <p class="lead">
-        Manipulation benchmarks randomize what the world <em>looks</em> like — backgrounds, lighting, clutter —
-        but keep what the world <em>is</em> like fixed. <b>RoboTwin-Phys</b> turns the world's physical
-        parameters into <b>controllable, labelable variables</b>: 13 physical factors on 50 bimanual tasks,
-        with per-episode ground truth down to 250 Hz contact-force logs and failure timelines.
+  <!-- ================= MOTIVATION（含滑块视频） ================= -->
+  <section class="section" id="motivation">
+    <div class="container is-max-desktop">
+      <div class="prose" style="margin:0 auto">
+        <div class="kicker">Motivation</div>
+        <h2 class="sec" style="margin-bottom:18px">Why benchmark physical drift?</h2>
+        <p>
+          A manipulation policy deployed in the real world almost never meets the physics it was trained
+          with. Tabletops get waxed or wet, so grasps that used to hold start to slip. A box may be loaded
+          or empty; a bottle may be half-filled, shifting its center of mass mid-grasp. Hinges and drawers
+          age and resist. Workbenches are not perfectly level; camera mounts get bumped during maintenance.
+          None of these changes alter what the scene <em>looks like</em> — yet each of them can decide
+          whether a grasp holds, a placement stays, or a door opens.
+        </p>
+        <p>
+          Today's benchmarks certify robustness to appearance, not to physics.
+          <b>RoboTwin 2.0</b>'s demo_randomized suite varies backgrounds, lighting, clutter, table height
+          (±3&nbsp;cm), and language instructions — while every physical parameter (friction&nbsp;0.5,
+          restitution&nbsp;0, fixed masses, level table, pinned camera) stays hard-coded. A policy can thus
+          ace the official evaluation and still fail catastrophically the first time the world's physics
+          drifts.
+        </p>
+        <p>
+          <b>Physics is not a constant.</b> Drag the sliders below — <b>same scene, same action, only one
+          physical factor changes each time</b> — and watch outcomes diverge. If physics matters this
+          much, we should measure it — with controllable perturbations, exact ground truth, and a protocol
+          that turns "the policy failed" into an attributable, reproducible diagnosis.
+        </p>
+      </div>
+      <div class="factor-grid" id="factorGrid"></div>
+      <p class="has-text-centered muted" style="font-size:0.85rem">
+        Each card is one physical factor; each slider runs three levels from the default outward.
       </p>
     </div>
   </section>
@@ -247,55 +286,54 @@
         </div>
       </div>
 
-      <h3 class="sec">13 injectable physical factors</h3>
-      <div class="pgrid">
-        <div class="pcell"><span class="pi">🧊</span><b>Friction μ</b><span>Grasp slip, slide-off</span></div>
-        <div class="pcell"><span class="pi">🏋️</span><b>Mass</b><span>Drop, unstable placement</span></div>
-        <div class="pcell"><span class="pi">⚖️</span><b>Center of mass</b><span>In-grasp rotation, topple</span></div>
-        <div class="pcell"><span class="pi">🎾</span><b>Restitution</b><span>Bounce-out of container</span></div>
-        <div class="pcell"><span class="pi">🚪</span><b>Object joint damping</b><span>Door / lid won't open</span></div>
-        <div class="pcell"><span class="pi">🦾</span><b>Arm joint damping</b><span>Sloppy, overdamped motion</span></div>
-        <div class="pcell"><span class="pi">🤏</span><b>Gripper damping</b><span>Unstable grasp force</span></div>
-        <div class="pcell"><span class="pi">📐</span><b>Table tilt</b><span>Roll-away, slow topple</span></div>
-        <div class="pcell"><span class="pi">🌬️</span><b>External force</b><span>Drift during transport</span></div>
-        <div class="pcell"><span class="pi">📦</span><b>Geometry scale</b><span>Grasp-pose mismatch</span></div>
-        <div class="pcell"><span class="pi">🪑</span><b>Table height</b><span>Out-of-workspace reach</span></div>
-        <div class="pcell"><span class="pi">🎥</span><b>Camera distance</b><span>Viewpoint shift</span></div>
-        <div class="pcell"><span class="pi">📸</span><b>Camera angle</b><span>Strongest observed failure</span></div>
+      <div class="prose" style="margin-top:26px">
+        <div class="kicker">Benchmark design</div>
+        <p>
+          <b>Factor selection is grounded in deployment reality.</b> Each of the 13 factors maps to a
+          routine, well-documented deployment event — a waxed tabletop, a half-filled bottle, an aging
+          hinge, a bumped camera mount — rather than an arbitrary parameter sweep. Factors are grouped by
+          where they act: <b>contact</b> (friction, restitution, joint dampings), <b>object</b> (mass,
+          center of mass, geometry scale), <b>workspace</b> (table tilt, table height, external force),
+          and <b>sensor</b> (camera distance, camera angle).
+        </p>
+        <p>
+          <b>Tiered perturbations with measured failure envelopes.</b> Each factor is swept over fixed
+          tiers around its measured failure envelope. We define a factor's <b>operating point</b> as the
+          tier where baseline success drops to 40–60%: hard enough to expose sensitivity, gentle enough to
+          leave signal for comparing methods. Leaderboard entries are reported at these operating points.
+        </p>
+        <p>
+          <b>Paired no-drift control.</b> Every perturbed condition ships with a no-drift control run on
+          the same seeds, so any performance change is attributable to the injected physics and nothing
+          else.
+        </p>
       </div>
+
+      <h3 class="sec">13 injectable physical factors</h3>
+      <table class="detail" style="margin-top:14px">
+        <tr><th>Factor</th><th>Physical meaning</th><th>Real-world counterpart</th><th>Typical failure it induces</th></tr>
+        <tr><td>🧊 Friction μ</td><td>Contact friction coefficient</td><td>Waxed / wet tabletop</td><td>Grasp slip, slide-off</td></tr>
+        <tr><td>🏋️ Mass</td><td>Object mass scaling</td><td>Loaded vs. empty box</td><td>Drop, unstable placement</td></tr>
+        <tr><td>⚖️ Center of mass</td><td>CoM offset within object</td><td>Half-filled bottle</td><td>In-grasp rotation, topple</td></tr>
+        <tr><td>🎾 Restitution</td><td>Bounciness of contacts</td><td>Rubber vs. ceramic parts</td><td>Bounce-out of container</td></tr>
+        <tr><td>🚪 Object joint damping</td><td>Articulated-joint resistance</td><td>Aging hinges</td><td>Door / lid won't open</td></tr>
+        <tr><td>🦾 Arm joint damping</td><td>Robot arm PD damping</td><td>Aging actuators</td><td>Sloppy / overdamped motion</td></tr>
+        <tr><td>🤏 Gripper damping</td><td>Gripper PD damping</td><td>Worn gripper drive</td><td>Unstable grasp force</td></tr>
+        <tr><td>📐 Table tilt</td><td>Non-level workspace</td><td>Unleveled table</td><td>Roll-away, slow topple</td></tr>
+        <tr><td>🌬️ External force</td><td>Persistent force field</td><td>Airflow, conveyor vibration</td><td>Drift during transport</td></tr>
+        <tr><td>📦 Geometry scale</td><td>Object size scaling</td><td>Different product batches</td><td>Grasp-pose mismatch</td></tr>
+        <tr><td>🪑 Table height</td><td>Workspace height offset</td><td>Non-standard furniture</td><td>Out-of-workspace reach</td></tr>
+        <tr><td>🎥 Camera distance</td><td>Head-camera displacement</td><td>Bumped camera mount</td><td>Viewpoint generalization</td></tr>
+        <tr><td>📸 Camera angle</td><td>Head-camera orientation</td><td>Tilted camera</td><td>Strongest observed failure</td></tr>
+      </table>
     </div>
   </section>
 
   <!-- ================= RESULTS ================= -->
   <section class="section hero is-light" id="results">
     <div class="container is-max-desktop">
-      <p class="result-headline">
-        Policies scoring <em>&gt;90%</em> under visual randomization
-        collapse to <em>single digits</em> under physical drift.
-      </p>
-      <p class="has-text-centered muted" style="font-size:.92rem">
-        Failures that current benchmarks simply never produce.
-      </p>
-
-      <!-- TODO: 替换为真实实验数值（当前为示意占位） -->
-      <div class="bars">
-        <div class="bar-row">
-          <div class="bl">Visual randomization (official)</div>
-          <div class="bar-track"><div class="bar-fill ok" style="width:92%">92%</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bl">Friction drift</div>
-          <div class="bar-track"><div class="bar-fill" style="width:9%">9%</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bl">Camera-angle drift</div>
-          <div class="bar-track"><div class="bar-fill" style="width:4%">4%</div></div>
-        </div>
-        <div class="bar-row">
-          <div class="bl">Joint-damping drift</div>
-          <div class="bar-track"><div class="bar-fill" style="width:12%">12%</div></div>
-        </div>
-        <p class="has-text-centered muted" style="font-size:.78rem;margin-top:6px">Illustrative placeholder — replace with measured success rates.</p>
+      <div class="has-text-centered">
+        <h2 class="sec">Failure cases current benchmarks never produce</h2>
       </div>
 
       <div class="fail-grid">
@@ -312,6 +350,20 @@
           <div class="fc-cap">🚪 Aged joint damping — the drawer barely opens.</div>
         </div>
       </div>
+
+      <div class="prose" style="margin:34px auto 0">
+        <div class="kicker">What we observe</div>
+        <ul class="obs-list" style="margin-top:4px">
+          <li><b>Camera-angle drift is the strongest observed failure mode.</b> A bumped camera mount — a
+            routine deployment event — is catastrophic for policies evaluated only with fixed cameras.</li>
+          <li><b>Contact-property drift is silent.</b> Friction and damping changes leave RGB almost
+            unchanged, so failures appear without any visual warning; only the contact-force logs reveal
+            the onset.</li>
+          <li><b>Failures are structured.</b> Timeline labels show a consistent
+            injection&nbsp;→&nbsp;physical event&nbsp;→&nbsp;failure cascade, giving detection methods a
+            measurable window to act before the episode is lost.</li>
+        </ul>
+      </div>
     </div>
   </section>
 
@@ -319,26 +371,93 @@
   <section class="section" id="dataset">
     <div class="container is-max-desktop">
       <h2 class="sec">Dataset</h2>
+      <div class="prose">
+        <p>
+          The dataset is organized into four subsets with distinct roles. <b>Probe interactions</b>
+          (~30K clips) are short, atomic behaviors — push, shake, drag, drop, push-door — crossed with
+          factors, levels, and objects, designed for physics-perception training: learning to read physical
+          properties from observations. <b>Task episodes with drift</b> (~5K episodes) inject physical
+          drift into full bimanual tasks and keep both successes and failures, enabling step-level failure
+          analysis in the task domain. <b>Random++</b> mixes multiple randomized physics
+          factors for robustness training. Finally, the <b>no-drift control</b> ships the official
+          RoboTwin 2.0 data (27.5K episodes) so that every drifted episode has a paired baseline on the
+          same seed.
+        </p>
+      </div>
       <table>
         <tr><th>Subset</th><th>Content</th><th>Purpose</th><th>Size</th></tr>
         <tr><td>Probe interactions</td><td>Push / shake / drag / drop / push-door × factors × levels × objects</td><td>Physics-perception training</td><td>~30K clips</td></tr>
-        <tr><td>Task episodes w/ drift</td><td>Mid-episode injection, success+failure kept</td><td>Detection &amp; attribution in task domain</td><td>~5K episodes</td></tr>
+        <tr><td>Task episodes w/ drift</td><td>Physics drift injected, success + failure kept</td><td>Step-level failure analysis in task domain</td><td>~5K episodes</td></tr>
         <tr><td>Random++ (multi-factor)</td><td>Randomized physics mixtures</td><td>Robustness training</td><td>TBD</td></tr>
         <tr><td>No-drift control</td><td>RoboTwin 2.0 official (27.5K episodes)</td><td>Baseline</td><td>included</td></tr>
       </table>
-      <p style="margin-top:18px">Every episode ships with far more than RGB video:</p>
-      <div class="chips">
-        <span class="chip">250 Hz contact-force logs</span>
-        <span class="chip">50 Hz object kinematics</span>
-        <span class="chip">Exact physics ground truth</span>
-        <span class="chip">Failure timelines</span>
-        <span class="chip">Fixed-seed paired control</span>
+      <h3 class="sec">Signals beyond RGB video</h3>
+      <div class="prose">
+        <p>
+          Every episode ships with far more than RGB video. Videos alone make drift a guessing game:
+          a grasp slip and a mistimed grasp look identical on frame sequences. Our extra signals turn
+          "the policy failed" into "<b>friction dropped at step 100, the grasp slipped at step 132, the
+          episode failed at step 150</b>" — measurable, attributable, and learnable.
+        </p>
       </div>
-      <p class="muted" style="font-size:.88rem">
-        These signals turn "the policy failed" into "friction dropped at step 100, the grasp slipped at step 132,
-        the episode failed at step 150" — measurable, attributable, and learnable.
-        Full label schema and collection protocol are described in the paper.
-      </p>
+      <table class="detail">
+        <tr><th>Signal</th><th>Content</th><th>Rate</th></tr>
+        <tr><td>Contact-force log</td><td>Per-contact impulse (normal + tangential), position, count</td><td>250 Hz</td></tr>
+        <tr><td>Object kinematics</td><td>Pose, linear / angular velocity of every manipulated object</td><td>50 Hz</td></tr>
+        <tr><td>Ground-truth labels</td><td>Factor, level, exact physics values, seed</td><td>per episode</td></tr>
+        <tr><td>Outcome &amp; timeline</td><td>Failure mode (slide / topple / escape / …) + event onsets (injection → physical event → failure)</td><td>per episode</td></tr>
+        <tr><td>Fixed-seed control</td><td>Paired no-drift episode on the same seed</td><td>per episode</td></tr>
+      </table>
+
+      <h3 class="sec">Label schema &amp; collection protocol</h3>
+      <div class="prose">
+        <p>Every episode carries the following schema:</p>
+      </div>
+      <div class="schema">factor | level | physics_gt (e.g. μ value) | seed | outcome (slide/topple/escape/…) | contact_log (250Hz impulses) | timeline (injection → physical event → failure)</div>
+      <div class="prose" style="margin-top:16px">
+        <p>
+          <b>Fair comparison is enforced at collection time.</b> Fixed per-task seed lists guarantee the
+          same initial states across all conditions; the software stack is pinned via
+          <code>env.lock</code>; no seed re-rolling is allowed under perturbation. Because physics engines
+          are only approximately deterministic, each (seed, condition) cell is repeated 2–3 times and
+          reported as a seed-level success rate.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= EVALUATION ================= -->
+  <section class="section" id="evaluation" style="background:#faf9fd">
+    <div class="container is-max-desktop">
+      <h2 class="sec">Evaluation Protocol</h2>
+      <div class="prose">
+        <p>
+          <b>One unified evaluation configuration.</b> All tasks and all methods are evaluated under a
+          single shared protocol: each factor is evaluated at its operating point — the tier where
+          baseline success drops to 40–60% — with the same seed lists, the same episode counts, and a
+          paired no-drift control on the same seeds. This keeps every reported number comparable across
+          methods and across factors.
+        </p>
+        <p>
+          <b>Per-task adjusted configurations.</b> Planner behavior can be sensitive to control settings
+          under drift, so for a subset of tasks we individually fine-tune the evaluation configuration to
+          keep the planner stable. These adjustments touch only the planner's control parameters — never
+          the injected physics, the seeds, or the success criteria — and the exact configuration used for
+          every (task, factor, level) cell is released with the benchmark for full transparency.
+        </p>
+        <p>
+          <b>Fairness and repetition.</b> Fixed per-task seed lists guarantee identical initial states
+          across all conditions; the software stack is pinned via <code>env.lock</code>; no seed
+          re-rolling is allowed under perturbation. Because physics engines are only approximately
+          deterministic, each (seed, condition) cell is repeated 2–3 times and reported as a seed-level
+          success rate.
+        </p>
+        <p>
+          <b>Reporting.</b> The leaderboard reports each method's success rate under drift alongside the
+          paired no-drift baseline, and the success-rate delta between them, at every factor's operating
+          point.
+        </p>
+      </div>
     </div>
   </section>
 
@@ -354,8 +473,7 @@
       </table>
       <p class="muted" style="font-size:0.85rem">
         Success-rate deltas vs. no-drift baseline at each factor's operating point.
-        Evaluation also reports detection latency, attribution accuracy, and recovery rate — see paper for the full protocol.
-        Submission instructions TBD.
+        See the evaluation protocol above for configuration and fairness details. Submission instructions TBD.
       </p>
     </div>
   </section>
