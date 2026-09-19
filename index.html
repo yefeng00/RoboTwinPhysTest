@@ -18,6 +18,11 @@
     html { scroll-behavior:smooth; font-size:18px; }
     body { color:var(--ink); }
 
+    /* ---------- 全局宽度：内容区与 teaser 统一为 80%（上限 1600px） ---------- */
+    .container.is-max-desktop { width:80%; max-width:1600px; }
+    .topnav-inner { width:80%; max-width:1600px; }
+    .prose, .abstract-box, .lead, .obs-list { max-width:100%; }
+
     /* ---------- 顶部导航 ---------- */
     .topnav { position:fixed; top:0; left:0; right:0; z-index:50;
       background:rgba(255,255,255,.88); backdrop-filter:blur(10px);
@@ -195,8 +200,8 @@
 
   <!-- ================= TEASER ================= -->
   <section style="padding:0.8rem 0 0.6rem">
-    <div style="width:100%">
-      <img src="assets/teaser.jpg" alt="RoboTwin-Phys: a physically grounded simulation benchmark — from visual diversity to physical diversity" style="width:100%;display:block">
+    <div style="width:80%;max-width:1600px;margin:0 auto">
+      <img src="assets/teaser.jpg" alt="RoboTwin-Phys: a physically grounded simulation benchmark — from visual diversity to physical diversity" style="width:100%;display:block;border-radius:12px;box-shadow:0 2px 12px rgba(30,27,46,.10)">
     </div>
   </section>
 
