@@ -18,11 +18,6 @@
     html { scroll-behavior:smooth; font-size:18px; }
     body { color:var(--ink); }
 
-    /* ---------- 全局宽度：内容区与 teaser 统一为 80%（上限 1600px） ---------- */
-    .container.is-max-desktop { width:80%; max-width:1600px; }
-    .topnav-inner { width:80%; max-width:1600px; }
-    .prose, .abstract-box, .lead, .obs-list { max-width:100%; }
-
     /* ---------- 顶部导航 ---------- */
     .topnav { position:fixed; top:0; left:0; right:0; z-index:50;
       background:rgba(255,255,255,.88); backdrop-filter:blur(10px);
@@ -119,6 +114,11 @@
       color:var(--main); font-size:.8rem; font-weight:600; padding:5px 12px; border-radius:8px; cursor:pointer; }
     .copy-btn:hover { background:var(--main-tint); }
     code { background:#f1f5f9; border-radius:6px; padding:1px 6px; font-family:ui-monospace,Menlo,monospace; }
+
+    /* ---------- 全局宽度：内容区与 teaser 统一为 80%（上限 1600px）；必须置底以覆盖上面的限宽 ---------- */
+    .container.is-max-desktop { width:80%; max-width:1600px; }
+    .topnav-inner { width:80%; max-width:1600px; }
+    .prose, .abstract-box, .lead, .obs-list { max-width:100%; }
   </style>
 </head>
 <body>
