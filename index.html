@@ -3,12 +3,12 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="title" content="RoboTwin-Phys - Benchmarking Physical Drift in Robot Manipulation">
-  <meta name="description" content="A physical-drift benchmark for robot manipulation: 13 controllable physical factors, ground-truth labels, contact-force logs, and failure timelines on RoboTwin 2.0.">
-  <meta name="keywords" content="robotics, benchmark, manipulation, physics, domain randomization, RoboTwin, VLA, world model">
+  <meta name="title" content="RoboTwin-Phys: Do WAMs and VLAs Understand the Physical World?">
+  <meta name="description" content="A physics-diverse manipulation benchmark on RoboTwin 2.0: 13 physical attributes continuously sampled per episode across 50 bimanual tasks, plus 5,000+ expert demos with 13-dimensional ground-truth physical parameters.">
+  <meta name="keywords" content="robotics, benchmark, manipulation, physics, domain randomization, RoboTwin, VLA, WAM, world model">
   <meta name="author" content="Peking University, Memo">
   <meta name="robots" content="index, follow">
-  <title>RoboTwin-Phys | Benchmarking Physical Drift in Robot Manipulation</title>
+  <title>RoboTwin-Phys | Do WAMs and VLAs Understand the Physical World?</title>
 
   <link rel="stylesheet" href="static/css/index.css">
   <link rel="stylesheet" href="static/css/bulma.min.css">
@@ -149,6 +149,7 @@
               <span class="author-block">Zhihong Chen<sup>1</sup>,</span>
               <span class="author-block">Mingkang Xiang<sup>1</sup>,</span>
               <span class="author-block">Xinglin Yao<sup>1</sup>,</span>
+              <span class="author-block">Yanbin Li<sup>1</sup>,</span>
               <span class="author-block">Siwei Ma<sup>1</sup>,</span>
               <span class="author-block">Chuanmin Jia<sup>1,‡</sup></span>
             </div>
@@ -159,8 +160,8 @@
               <span class="author-block"><sup>1</sup>Peking University &nbsp;&nbsp; <sup>2</sup>Advanced Institute of Information Technology, Peking University &nbsp;&nbsp; <sup>3</sup>Memo</span>
             </div>
             <p class="subtitle is-5" style="margin-top:12px">
-              What happens to robot policies when the <b>physics</b> of the world changes?<br>
-              A physical-drift benchmark for manipulation: controllable factors, ground-truth labels, failure timelines.
+              <b>RoboTwin-Phys: Do WAMs and VLAs Understand the Physical World?</b><br>
+              A physics-diverse manipulation benchmark: 13 physical attributes continuously sampled per episode, 5,000+ expert demos with ground-truth physical parameters.
             </p>
             <div class="column has-text-centered">
               <div class="publication-links">
@@ -188,11 +189,11 @@
               </div>
             </div>
             <div class="stats">
-              <div class="stat"><div class="stat-num">13</div><div class="stat-label">physical factors</div></div>
-              <div class="stat"><div class="stat-num">50</div><div class="stat-label">tasks</div></div>
-              <div class="stat"><div class="stat-num">30K+</div><div class="stat-label">labeled clips</div></div>
-              <div class="stat"><div class="stat-num">250Hz</div><div class="stat-label">contact-force logs</div></div>
-              <div class="stat"><div class="stat-num">5</div><div class="stat-label">signals per episode</div></div>
+              <div class="stat"><div class="stat-num">13</div><div class="stat-label">physical attributes</div></div>
+              <div class="stat"><div class="stat-num">50</div><div class="stat-label">bimanual tasks</div></div>
+              <div class="stat"><div class="stat-num">5K+</div><div class="stat-label">expert demos</div></div>
+              <div class="stat"><div class="stat-num">13-dim</div><div class="stat-label">physics ground truth</div></div>
+              <div class="stat"><div class="stat-num">5</div><div class="stat-label">WAM / VLA models</div></div>
             </div>
           </div>
         </div>
@@ -205,18 +206,21 @@
     <div class="container is-max-desktop">
       <div class="kicker has-text-centered">Abstract</div>
       <div class="abstract-box">
-        Manipulation benchmarks randomize what the world <em>looks like</em> — backgrounds, lighting,
-        clutter — but keep what the world <em>is like</em> fixed: friction, mass, restitution,
-        gravity-aligned tables, and calibrated cameras are hard-coded constants. <b>RoboTwin-Phys</b>
-        turns the world's physical parameters into <b>controllable, labelable variables</b>. Across
-        <b>13 physical factors</b> on <b>50 bimanual tasks</b>, we build tiered perturbation
-        configurations with measured failure envelopes, fixed-seed paired evaluation, and per-episode
-        ground truth: exact physics values, contact-force logs at 250&nbsp;Hz, object kinematics at
-        50&nbsp;Hz, and failure timelines. The failure cases it produces — grasp slips, in-grasp
-        topples, bounce-outs, stuck drawers — are failures that current benchmarks simply never
-        produce. RoboTwin-Phys provides the code, configs, protocol, and data to measure them,
-        together with a public leaderboard reporting success-rate deltas against paired no-drift
-        baselines.
+        Manipulation benchmarks increasingly randomize what the world <em>looks like</em> — appearance,
+        layout, lighting, viewpoints — but keep what the world <em>is like</em> fixed: mass, friction,
+        restitution, joint damping, and geometry stay at nominal values. <b>RoboTwin-Phys</b> introduces
+        <b>physical-condition diversity</b> as an explicit dimension of robot-manipulation evaluation on the
+        50-task bimanual suite of RoboTwin&nbsp;2.0: <b>13 physical attributes</b> are continuously sampled at
+        the episode level within physically plausible, task-aware ranges, and every condition is verified
+        executable by an expert planner before it enters the benchmark. Together with the benchmark we
+        release a training set of <b>more than 5,000 expert demonstrations</b>, each annotated with the
+        13-dimensional ground-truth physical parameters in effect during its episode — enabling
+        physical-attribute estimation, condition-aware modeling, and physics-conditioned policy training.
+        Evaluations of representative WAMs and VLAs — Fast-WAM, Motus, FACT, π0.5, and X-VLA — reveal a
+        <b>substantial robustness gap</b>: models that remain effective under existing visual and layout
+        randomization degrade markedly when physical conditions vary. RoboTwin-Phys provides the benchmark,
+        data, and evaluation protocol needed to systematically measure and improve robustness to
+        physical-condition diversity.
       </div>
     </div>
   </section>
@@ -237,17 +241,16 @@
         </p>
         <p>
           Today's benchmarks certify robustness to appearance, not to physics.
-          <b>RoboTwin 2.0</b>'s demo_randomized suite varies backgrounds, lighting, clutter, table height
-          (±3&nbsp;cm), and language instructions — while every physical parameter (friction&nbsp;0.5,
-          restitution&nbsp;0, fixed masses, level table, pinned camera) stays hard-coded. A policy can thus
-          ace the official evaluation and still fail catastrophically the first time the world's physics
-          drifts.
+          <b>RoboTwin 2.0</b>'s official suite varies backgrounds, lighting, clutter, object poses, and
+          camera viewpoints — while the underlying physical parameters (mass, friction, restitution, joint
+          damping, geometry) are kept at fixed nominal values. A policy can thus ace the official
+          evaluation and still fail the first time the world's physics drifts.
         </p>
         <p>
           <b>Physics is not a constant.</b> Drag the sliders below — <b>same scene, same action, only one
           physical factor changes each time</b> — and watch outcomes diverge. If physics matters this
-          much, we should measure it — with controllable perturbations, exact ground truth, and a protocol
-          that turns "the policy failed" into an attributable, reproducible diagnosis.
+          much, it deserves its own benchmark dimension: physical conditions that are continuously
+          sampled, exactly reproducible, verified feasible, and labeled with ground-truth values.
         </p>
       </div>
       <div class="factor-grid" id="factorGrid"></div>
@@ -268,10 +271,10 @@
           <ul>
             <li>Background textures &amp; lighting</li>
             <li>Clutter &amp; distractors</li>
-            <li>Table height (±3 cm)</li>
-            <li>Language instructions</li>
+            <li>Object poses &amp; layout</li>
+            <li>Camera viewpoints</li>
           </ul>
-          <p class="muted" style="font-size:.85rem;margin-top:10px">Physics stays hard-coded: friction 0.5, restitution 0, fixed masses, level table, pinned camera.</p>
+          <p class="muted" style="font-size:.85rem;margin-top:10px">Physics stays at nominal values: fixed masses, friction, restitution, damping, geometry, level table.</p>
         </div>
         <div class="vs-card vs-new">
           <span class="tag">THIS WORK</span>
@@ -282,7 +285,7 @@
             <li>Workspace: tilt, height, external force</li>
             <li>Sensor: camera distance &amp; angle</li>
           </ul>
-          <p class="muted" style="font-size:.85rem;margin-top:10px">Every factor is controllable, swept in tiers, and labeled with exact ground-truth values.</p>
+          <p class="muted" style="font-size:.85rem;margin-top:10px">Every factor is sampled continuously per episode and labeled with exact ground-truth values.</p>
         </div>
       </div>
 
@@ -297,15 +300,26 @@
           and <b>sensor</b> (camera distance, camera angle).
         </p>
         <p>
-          <b>Tiered perturbations with measured failure envelopes.</b> Each factor is swept over fixed
-          tiers around its measured failure envelope. We define a factor's <b>operating point</b> as the
-          tier where baseline success drops to 40–60%: hard enough to expose sensitivity, gentle enough to
-          leave signal for comparing methods. Leaderboard entries are reported at these operating points.
+          <b>Continuous, episode-level sampling.</b> The 13 attributes are sampled independently at
+          episode initialization from their designated continuous ranges and remain fixed during the
+          rollout; the episode seed determines the sampling stream, so any instantiated condition can be
+          reproduced exactly. Physical sampling is independent of the original visual and layout
+          randomization — physical variation can be studied in isolation, with visual variation retained,
+          or with both enabled simultaneously.
         </p>
         <p>
-          <b>Paired no-drift control.</b> Every perturbed condition ships with a no-drift control run on
-          the same seeds, so any performance change is attributable to the injected physics and nothing
-          else.
+          <b>Task-aware physical validity.</b> A single global range is not appropriate for every task.
+          Nine physics-sensitive tasks — including dump_bin_bigbin, grab_roller, beat_block_hammer,
+          put_bottles_dustbin, open_microwave, turn_switch, put_object_cabinet, scan_object, and
+          place_bread_skillet — are automatically routed to dedicated, empirically calibrated
+          configurations, so every benchmark instance remains a physically plausible instance of its
+          task rather than a numerically valid but meaningless simulator state.
+        </p>
+        <p>
+          <b>Expert-verified feasibility.</b> A sampled physical condition is retained as a benchmark
+          instance only when the expert planner can complete the task under it. Failures therefore
+          reflect a model's inability to cope with physical variation — not the absence of a valid
+          solution under the sampled environment.
         </p>
       </div>
 
@@ -313,18 +327,18 @@
       <table class="detail" style="margin-top:14px">
         <tr><th>Factor</th><th>Physical meaning</th><th>Real-world counterpart</th><th>Typical failure it induces</th></tr>
         <tr><td>🧊 Friction μ</td><td>Contact friction coefficient</td><td>Waxed / wet tabletop</td><td>Grasp slip, slide-off</td></tr>
-        <tr><td>🏋️ Mass</td><td>Object mass scaling</td><td>Loaded vs. empty box</td><td>Drop, unstable placement</td></tr>
-        <tr><td>⚖️ Center of mass</td><td>CoM offset within object</td><td>Half-filled bottle</td><td>In-grasp rotation, topple</td></tr>
-        <tr><td>🎾 Restitution</td><td>Bounciness of contacts</td><td>Rubber vs. ceramic parts</td><td>Bounce-out of container</td></tr>
-        <tr><td>🚪 Object joint damping</td><td>Articulated-joint resistance</td><td>Aging hinges</td><td>Door / lid won't open</td></tr>
-        <tr><td>🦾 Arm joint damping</td><td>Robot arm PD damping</td><td>Aging actuators</td><td>Sloppy / overdamped motion</td></tr>
-        <tr><td>🤏 Gripper damping</td><td>Gripper PD damping</td><td>Worn gripper drive</td><td>Unstable grasp force</td></tr>
-        <tr><td>📐 Table tilt</td><td>Non-level workspace</td><td>Unleveled table</td><td>Roll-away, slow topple</td></tr>
-        <tr><td>🌬️ External force</td><td>Persistent force field</td><td>Airflow, conveyor vibration</td><td>Drift during transport</td></tr>
-        <tr><td>📦 Geometry scale</td><td>Object size scaling</td><td>Different product batches</td><td>Grasp-pose mismatch</td></tr>
-        <tr><td>🪑 Table height</td><td>Workspace height offset</td><td>Non-standard furniture</td><td>Out-of-workspace reach</td></tr>
-        <tr><td>🎥 Camera distance</td><td>Head-camera displacement</td><td>Bumped camera mount</td><td>Viewpoint generalization</td></tr>
-        <tr><td>📸 Camera angle</td><td>Head-camera orientation</td><td>Tilted camera</td><td>Strongest observed failure</td></tr>
+        <tr><td>🏋️ Mass</td><td>Object mass scaling (0.125–4×)</td><td>Loaded vs. empty box</td><td>Drop, unstable placement</td></tr>
+        <tr><td>⚖️ Center of mass</td><td>CoM offset ±1.5 cm per axis</td><td>Half-filled bottle</td><td>In-grasp rotation, topple</td></tr>
+        <tr><td>🎾 Restitution</td><td>Contact bounciness (0–0.5)</td><td>Rubber vs. ceramic parts</td><td>Bounce-out of container</td></tr>
+        <tr><td>🚪 Object joint damping</td><td>Articulated-joint resistance (0–25)</td><td>Aging hinges</td><td>Door / lid won't open</td></tr>
+        <tr><td>🦾 Arm joint damping</td><td>Robot arm PD damping (0.5–3×)</td><td>Aging actuators</td><td>Sloppy / overdamped motion</td></tr>
+        <tr><td>🤏 Gripper damping</td><td>Gripper PD damping (0.5–3×)</td><td>Worn gripper drive</td><td>Unstable grasp force</td></tr>
+        <tr><td>📐 Table tilt</td><td>Non-level workspace (0–2°)</td><td>Unleveled table</td><td>Roll-away, slow topple</td></tr>
+        <tr><td>🌬️ External force</td><td>Persistent force up to 0.1 mg</td><td>Airflow, conveyor vibration</td><td>Drift during transport</td></tr>
+        <tr><td>📦 Geometry scale</td><td>Uniform object scaling (0.85–1.05×)</td><td>Different product batches</td><td>Grasp-pose mismatch</td></tr>
+        <tr><td>🪑 Table height</td><td>Workspace height (−8–0 cm)</td><td>Non-standard furniture</td><td>Out-of-workspace reach</td></tr>
+        <tr><td>🎥 Camera distance</td><td>Head-camera displacement: orbit 0–10 cm or shift 0–3 cm</td><td>Bumped camera mount</td><td>Viewpoint generalization gap</td></tr>
+        <tr><td>📸 Camera angle</td><td>Head-camera rotation 0–10°</td><td>Tilted camera mount</td><td>Mis-estimated object poses</td></tr>
       </table>
     </div>
   </section>
@@ -354,14 +368,16 @@
       <div class="prose" style="margin:34px auto 0">
         <div class="kicker">What we observe</div>
         <ul class="obs-list" style="margin-top:4px">
-          <li><b>Camera-angle drift is the strongest observed failure mode.</b> A bumped camera mount — a
-            routine deployment event — is catastrophic for policies evaluated only with fixed cameras.</li>
-          <li><b>Contact-property drift is silent.</b> Friction and damping changes leave RGB almost
-            unchanged, so failures appear without any visual warning; only the contact-force logs reveal
-            the onset.</li>
-          <li><b>Failures are structured.</b> Timeline labels show a consistent
-            injection&nbsp;→&nbsp;physical event&nbsp;→&nbsp;failure cascade, giving detection methods a
-            measurable window to act before the episode is lost.</li>
+          <li><b>A substantial robustness gap.</b> Models that barely drop under RoboTwin 2.0's official
+            visual randomization lose 30–50 success points once physical conditions are sampled:
+            Fast-WAM falls from 91.8% (Official Random) to 44.2% under Physical Random.</li>
+          <li><b>The gap holds across model families.</b> WAMs (Fast-WAM, Motus, FACT) and VLAs (π0.5)
+            all degrade markedly, and their per-task success rates strongly correlate (Pearson
+            0.75–0.81) — the challenge is not tied to any particular architecture.</li>
+          <li><b>Failures are structured, not random.</b> Hard tasks — beat_block_hammer,
+            pick_diverse_bottles, move_stapler_pad, place_can_basket, put_bottles_dustbin — concentrate
+            on contact-, load-, and articulation-sensitive behaviors, while grab_roller, shake_bottle,
+            and place_container_plate remain relatively robust.</li>
         </ul>
       </div>
     </div>
@@ -373,54 +389,53 @@
       <h2 class="sec">Dataset</h2>
       <div class="prose">
         <p>
-          The dataset is organized into four subsets with distinct roles. <b>Probe interactions</b>
-          (~30K clips) are short, atomic behaviors — push, shake, drag, drop, push-door — crossed with
-          factors, levels, and objects, designed for physics-perception training: learning to read physical
-          properties from observations. <b>Task episodes with drift</b> (~5K episodes) inject physical
-          drift into full bimanual tasks and keep both successes and failures, enabling step-level failure
-          analysis in the task domain. <b>Random++</b> mixes multiple randomized physics
-          factors for robustness training. Finally, the <b>no-drift control</b> ships the official
-          RoboTwin 2.0 data (27.5K episodes) so that every drifted episode has a paired baseline on the
-          same seed.
+          Along with the benchmark we release <b>RoboTwin-Phys Training Set v1</b>: more than
+          <b>5,000 expert episodes</b> spanning the physical-condition distribution defined by the
+          benchmark. Demonstrations are generated with the established expert pipeline — physics-sensitive
+          tasks are routed to their dedicated configurations, visual and layout randomization remains
+          available during collection, and every retained episode is verified executable under its
+          instantiated physical condition. The data remain fully compatible with the official RoboTwin
+          format, so existing WAM and VLA pipelines can consume them without any change to their
+          trajectory interfaces.
         </p>
       </div>
       <table>
-        <tr><th>Subset</th><th>Content</th><th>Purpose</th><th>Size</th></tr>
-        <tr><td>Probe interactions</td><td>Push / shake / drag / drop / push-door × factors × levels × objects</td><td>Physics-perception training</td><td>~30K clips</td></tr>
-        <tr><td>Task episodes w/ drift</td><td>Physics drift injected, success + failure kept</td><td>Step-level failure analysis in task domain</td><td>~5K episodes</td></tr>
-        <tr><td>Random++ (multi-factor)</td><td>Randomized physics mixtures</td><td>Robustness training</td><td>TBD</td></tr>
-        <tr><td>No-drift control</td><td>RoboTwin 2.0 official (27.5K episodes)</td><td>Baseline</td><td>included</td></tr>
+        <tr><th>Component</th><th>Content</th><th>Format</th></tr>
+        <tr><td>Trajectories</td><td>Actions, states, and camera streams for every episode</td><td>HDF5 (official RoboTwin format)</td></tr>
+        <tr><td>Videos</td><td>Corresponding MP4 recordings</td><td>MP4</td></tr>
+        <tr><td>phys_meta</td><td>The 13 physical attributes instantiated for each episode</td><td>JSON, per episode</td></tr>
+        <tr><td>Manifest</td><td>Mapping between tasks, benchmark configurations, and episode counts</td><td>Included in the release</td></tr>
       </table>
       <h3 class="sec">Signals beyond RGB video</h3>
       <div class="prose">
         <p>
-          Every episode ships with far more than RGB video. Videos alone make drift a guessing game:
-          a grasp slip and a mistimed grasp look identical on frame sequences. Our extra signals turn
-          "the policy failed" into "<b>friction dropped at step 100, the grasp slipped at step 132, the
-          episode failed at step 150</b>" — measurable, attributable, and learnable.
+          Every episode ships with more than RGB video: the exact physical condition that governed the
+          rollout. This explicit correspondence between observations, actions, and physical conditions
+          turns physical diversity into a reusable learning signal — supporting physical-attribute
+          estimation, condition-aware representation learning, and policy training conditioned on
+          physical attributes.
         </p>
       </div>
       <table class="detail">
-        <tr><th>Signal</th><th>Content</th><th>Rate</th></tr>
-        <tr><td>Contact-force log</td><td>Per-contact impulse (normal + tangential), position, count</td><td>250 Hz</td></tr>
-        <tr><td>Object kinematics</td><td>Pose, linear / angular velocity of every manipulated object</td><td>50 Hz</td></tr>
-        <tr><td>Ground-truth labels</td><td>Factor, level, exact physics values, seed</td><td>per episode</td></tr>
-        <tr><td>Outcome &amp; timeline</td><td>Failure mode (slide / topple / escape / …) + event onsets (injection → physical event → failure)</td><td>per episode</td></tr>
-        <tr><td>Fixed-seed control</td><td>Paired no-drift episode on the same seed</td><td>per episode</td></tr>
+        <tr><th>Signal</th><th>Content</th><th>Granularity</th></tr>
+        <tr><td>Physical ground truth</td><td>Values of the 13 sampled attributes in effect during the episode (mass, CoM, geometry, tilt, height, force, camera, friction, restitution, damping ×3)</td><td>per episode</td></tr>
+        <tr><td>Episode seed</td><td>Determines the sampling stream — any condition can be reproduced exactly</td><td>per episode</td></tr>
+        <tr><td>Task configuration</td><td>Global domain, or dedicated calibrated domain for the 9 physics-sensitive tasks</td><td>per task</td></tr>
+        <tr><td>Feasibility</td><td>Expert planner verified the episode executable under its physical condition</td><td>per episode</td></tr>
       </table>
 
       <h3 class="sec">Label schema &amp; collection protocol</h3>
       <div class="prose">
         <p>Every episode carries the following schema:</p>
       </div>
-      <div class="schema">factor | level | physics_gt (e.g. μ value) | seed | outcome (slide/topple/escape/…) | contact_log (250Hz impulses) | timeline (injection → physical event → failure)</div>
+      <div class="schema">episode ↔ seed | 13-dim physical attributes (mass, CoM, geometry scale, table tilt, table height, external force, camera mode &amp; magnitude, friction, restitution, object / arm / gripper damping) | task configuration (global / dedicated) | expert-verified feasibility</div>
       <div class="prose" style="margin-top:16px">
         <p>
-          <b>Fair comparison is enforced at collection time.</b> Fixed per-task seed lists guarantee the
-          same initial states across all conditions; the software stack is pinned via
-          <code>env.lock</code>; no seed re-rolling is allowed under perturbation. Because physics engines
-          are only approximately deterministic, each (seed, condition) cell is repeated 2–3 times and
-          reported as a seed-level success rate.
+          <b>Reproducibility is built in.</b> The episode seed determines the full physical sampling
+          stream, so any reported condition can be re-instantiated exactly. Benchmark, training, and
+          evaluation conditions are produced by the same sampling pipeline and filtered by the same
+          expert-verified feasibility check, keeping the evaluation space and the training resource
+          consistent by construction.
         </p>
       </div>
     </div>
@@ -432,30 +447,34 @@
       <h2 class="sec">Evaluation Protocol</h2>
       <div class="prose">
         <p>
-          <b>One unified evaluation configuration.</b> All tasks and all methods are evaluated under a
-          single shared protocol: each factor is evaluated at its operating point — the tier where
-          baseline success drops to 40–60% — with the same seed lists, the same episode counts, and a
-          paired no-drift control on the same seeds. This keeps every reported number comparable across
-          methods and across factors.
+          <b>Three environment protocols.</b> All tasks and all methods are evaluated under a single
+          shared setup with three conditions: <b>Clean</b> — all benchmark randomization disabled,
+          corresponding to the nominal environment configuration; <b>Official Random</b> — the original
+          visual and layout randomization of RoboTwin 2.0 enabled, with physical parameters at their
+          nominal values; <b>Physical Random</b> — the original randomization retained, and the 13
+          physical attributes additionally sampled according to the RoboTwin-Phys protocol. This keeps
+          every reported number comparable across methods and isolates physical robustness from visual
+          robustness.
         </p>
         <p>
-          <b>Per-task adjusted configurations.</b> Planner behavior can be sensitive to control settings
-          under drift, so for a subset of tasks we individually fine-tune the evaluation configuration to
-          keep the planner stable. These adjustments touch only the planner's control parameters — never
-          the injected physics, the seeds, or the success criteria — and the exact configuration used for
-          every (task, factor, level) cell is released with the benchmark for full transparency.
+          <b>Task-aware configurations.</b> Nine physics-sensitive tasks are routed to dedicated,
+          empirically calibrated physical domains — the exact task-specific configurations are released
+          with the benchmark — while all other tasks share the global configuration. This ensures the
+          benchmark measures robustness to physical diversity rather than artificially induced failure
+          cases.
         </p>
         <p>
-          <b>Fairness and repetition.</b> Fixed per-task seed lists guarantee identical initial states
-          across all conditions; the software stack is pinned via <code>env.lock</code>; no seed
-          re-rolling is allowed under perturbation. Because physics engines are only approximately
-          deterministic, each (seed, condition) cell is repeated 2–3 times and reported as a seed-level
-          success rate.
+          <b>Feasibility filtering.</b> The expert planner is run in advance on every instantiated
+          condition; episodes it cannot complete are excluded from the evaluation pool. Reported
+          failures therefore reflect the evaluated model's ability to cope with physical variation, not
+          the absence of a valid solution under the sampled environment.
         </p>
         <p>
-          <b>Reporting.</b> The leaderboard reports each method's success rate under drift alongside the
-          paired no-drift baseline, and the success-rate delta between them, at every factor's operating
-          point.
+          <b>Reporting.</b> Each task is evaluated with 100 rollout episodes. We report per-task and
+          aggregate success rates under each protocol; Clean and Official Random numbers are the
+          models' reported results from the corresponding public benchmark evaluations, while Physical
+          Random is evaluated by us. The complete 50-task breakdown for Fast-WAM, Motus, and FACT is in
+          the report (Appendix D).
         </p>
       </div>
     </div>
@@ -466,14 +485,17 @@
     <div class="container is-max-desktop">
       <h2 class="sec">Leaderboard</h2>
       <table>
-        <tr><th>Method</th><th>Friction ↓</th><th>Mass/CoM</th><th>Joint damping</th><th>Tilt</th><th>Restitution</th><th>Camera</th></tr>
-        <tr><td>Fast-WAM (baseline)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-        <tr><td>+ domain randomization</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
-        <tr><td>PhysTTT (ours)</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+        <tr><th>Method</th><th>Clean</th><th>Official Random</th><th>Physical Random</th></tr>
+        <tr><td>Fast-WAM</td><td>91.88</td><td>91.78</td><td><b>44.24</b></td></tr>
+        <tr><td>Motus</td><td>88.66</td><td>87.02</td><td><b>39.60</b></td></tr>
+        <tr><td>FACT</td><td>88.40</td><td>86.60</td><td><b>39.14</b></td></tr>
+        <tr><td>π0.5</td><td>82.74</td><td>76.76</td><td><b>31.60</b></td></tr>
+        <tr><td>X-VLA</td><td>72.88</td><td>72.84</td><td>–</td></tr>
       </table>
       <p class="muted" style="font-size:0.85rem">
-        Success-rate deltas vs. no-drift baseline at each factor's operating point.
-        See the evaluation protocol above for configuration and fairness details. Submission instructions TBD.
+        Aggregate success rates (%) on 50 tasks; Physical Random uses 100 rollout episodes per task.
+        Clean and Official Random are reported results from public benchmark evaluations; Physical
+        Random is evaluated by us. X-VLA is reserved for future evaluation.
       </p>
     </div>
   </section>
@@ -484,8 +506,8 @@
       <h2 class="sec">Citation</h2>
       <div class="cite-wrap">
         <pre id="bibtex">@misc{robotwin_phys_2026,
-  title  = {RoboTwin-Phys: Benchmarking Physical Drift in Robot Manipulation},
-  author = {Peking University and Memo},
+  title  = {RoboTwin-Phys: Do WAMs and VLAs Understand the Physical World?},
+  author = {Zhang, Jiaqi and Ye, Feng and Yang, Mingjia and Chen, Zhihong and Xiang, Mingkang and Yao, Xinglin and Li, Yanbin and Ma, Siwei and Jia, Chuanmin},
   year   = {2026}
 }</pre>
         <button class="copy-btn" onclick="copyBib(this)"><i class="far fa-copy"></i> Copy</button>
@@ -494,7 +516,7 @@
   </section>
 
   <footer class="footer has-text-centered muted" style="font-size:0.85rem">
-    RoboTwin-Phys · built on RoboTwin 2.0 (SAPIEN) · 2026
+    RoboTwin-Phys · built on RoboTwin 2.0 (SAPIEN) · MEMO Technical Report · 2026
   </footer>
 </main>
 
