@@ -15,7 +15,7 @@
   <link rel="stylesheet" href="static/css/fontawesome.all.min.css">
   <style>
     :root { --main:#6d28d9; --main-dark:#5b21b6; --main-tint:#f4f1fb; --ink:#1e1b2e; --muted:#64748b; }
-    html { scroll-behavior:smooth; }
+    html { scroll-behavior:smooth; font-size:18px; }
     body { color:var(--ink); }
 
     /* ---------- 顶部导航 ---------- */
@@ -194,9 +194,9 @@
   </section>
 
   <!-- ================= TEASER ================= -->
-  <section class="section" style="padding-top:0.8rem;padding-bottom:0.6rem">
-    <div class="container is-max-desktop has-text-centered">
-      <img src="assets/teaser.jpg" alt="RoboTwin-Phys: a physically grounded simulation benchmark — from visual diversity to physical diversity" style="width:100%;max-width:1100px;border-radius:12px;box-shadow:0 2px 12px rgba(30,27,46,.10)">
+  <section style="padding:0.8rem 0 0.6rem">
+    <div style="width:100%">
+      <img src="assets/teaser.jpg" alt="RoboTwin-Phys: a physically grounded simulation benchmark — from visual diversity to physical diversity" style="width:100%;display:block">
     </div>
   </section>
 
@@ -262,38 +262,7 @@
   <!-- ================= FACTORS ================= -->
   <section class="section" id="factors">
     <div class="container is-max-desktop">
-      <h2 class="sec">RoboTwin-Phys</h2>
-      <div class="grid2" style="margin-top:18px">
-        <div class="vs-card vs-old">
-          <span class="tag">EXISTING · ROBOTWIN 2.0</span>
-          <h4>Visual diversity</h4>
-          <ul>
-            <li>Dual-arm tasks with rich object diversity</li>
-            <li>Domain randomization: background, lighting, clutter</li>
-            <li>Open-source data generation &amp; leaderboard</li>
-          </ul>
-          <p class="muted" style="font-size:.85rem;margin-top:10px">Physics stays at nominal values: fixed mass, friction, restitution, damping, level table.</p>
-        </div>
-        <div class="vs-card vs-new">
-          <span class="tag">THIS WORK · ROBOTWIN-PHYS</span>
-          <h4>Physical diversity</h4>
-          <ul>
-            <li>13 physical factors — object, contact, damping, environment, camera</li>
-            <li>Single-factor &amp; compositional multi-factor disturbances</li>
-            <li>Per-episode ground-truth physical parameters</li>
-            <li>Open-source benchmark: dataset, evaluation, baselines</li>
-          </ul>
-          <p class="muted" style="font-size:.85rem;margin-top:10px">Every factor is continuously sampled per episode, exactly reproducible by seed, and verified feasible by the expert planner.</p>
-        </div>
-      </div>
-      <div class="chips" style="justify-content:center;margin-top:18px">
-        <span class="chip">🌐 Realistic Physics · visual → physical diversity</span>
-        <span class="chip">🧩 Compositional Disturbances · single + multi factor</span>
-        <span class="chip">📦 Open-source Benchmark · dataset · evaluation · baselines</span>
-        <span class="chip">🌍 Physical Generalization · understand physics, adapt to the real world</span>
-      </div>
-
-      <div class="prose" style="margin-top:26px">
+      <div class="prose">
         <div class="kicker">Benchmark design</div>
         <p>
           <b>Factor selection is grounded in deployment reality.</b> Each of the 13 factors maps to a
@@ -395,18 +364,6 @@
         <tr><td>phys_meta</td><td>The 13 physical attributes instantiated for the episode</td><td>JSON, per episode</td></tr>
         <tr><td>Manifest</td><td>Mapping between tasks, benchmark configurations, and episode counts</td><td>Included in the release</td></tr>
       </table>
-
-      <h3 class="sec">Label schema &amp; collection protocol</h3>
-      <div class="schema">episode ↔ seed | 13-dim physical attributes (mass, CoM, geometry scale, table tilt, table height, external force, camera mode &amp; magnitude, friction, restitution, object / arm / gripper damping) | task configuration (global / dedicated) | expert-verified feasibility</div>
-      <div class="prose" style="margin-top:16px">
-        <p>
-          <b>Reproducibility is built in.</b> The episode seed determines the full physical sampling
-          stream, so any reported condition can be re-instantiated exactly. Benchmark, training, and
-          evaluation conditions are produced by the same sampling pipeline and filtered by the same
-          expert-verified feasibility check, keeping the evaluation space and the training resource
-          consistent by construction.
-        </p>
-      </div>
     </div>
   </section>
 
