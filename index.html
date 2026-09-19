@@ -160,8 +160,7 @@
               <span class="author-block"><sup>1</sup>Peking University &nbsp;&nbsp; <sup>2</sup>Advanced Institute of Information Technology, Peking University &nbsp;&nbsp; <sup>3</sup>Memo</span>
             </div>
             <p class="subtitle is-5" style="margin-top:12px">
-              <b>RoboTwin-Phys: Do WAMs and VLAs Understand the Physical World?</b><br>
-              A physics-diverse manipulation benchmark: 13 physical attributes continuously sampled per episode, 5,000+ expert demos with ground-truth physical parameters.
+              <b>Do WAMs and VLAs Understand the Physical World?</b>
             </p>
             <div class="column has-text-centered">
               <div class="publication-links">
@@ -188,16 +187,16 @@
                 </span>
               </div>
             </div>
-            <div class="stats">
-              <div class="stat"><div class="stat-num">13</div><div class="stat-label">physical attributes</div></div>
-              <div class="stat"><div class="stat-num">50</div><div class="stat-label">bimanual tasks</div></div>
-              <div class="stat"><div class="stat-num">5K+</div><div class="stat-label">expert demos</div></div>
-              <div class="stat"><div class="stat-num">13-dim</div><div class="stat-label">physics ground truth</div></div>
-              <div class="stat"><div class="stat-num">5</div><div class="stat-label">WAM / VLA models</div></div>
-            </div>
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- ================= TEASER ================= -->
+  <section class="section" style="padding-top:0.8rem;padding-bottom:0.6rem">
+    <div class="container is-max-desktop has-text-centered">
+      <img src="assets/teaser.jpg" alt="RoboTwin-Phys: a physically grounded simulation benchmark — from visual diversity to physical diversity" style="width:100%;max-width:1100px;border-radius:12px;box-shadow:0 2px 12px rgba(30,27,46,.10)">
     </div>
   </section>
 
@@ -263,30 +262,35 @@
   <!-- ================= FACTORS ================= -->
   <section class="section" id="factors">
     <div class="container is-max-desktop">
-      <h2 class="sec">RoboTwin 2.0 randomizes vision. We randomize physics.</h2>
+      <h2 class="sec">RoboTwin-Phys</h2>
       <div class="grid2" style="margin-top:18px">
         <div class="vs-card vs-old">
-          <span class="tag">EXISTING</span>
-          <h4>Visual randomization</h4>
+          <span class="tag">EXISTING · ROBOTWIN 2.0</span>
+          <h4>Visual diversity</h4>
           <ul>
-            <li>Background textures &amp; lighting</li>
-            <li>Clutter &amp; distractors</li>
-            <li>Object poses &amp; layout</li>
-            <li>Camera viewpoints</li>
+            <li>Dual-arm tasks with rich object diversity</li>
+            <li>Domain randomization: background, lighting, clutter</li>
+            <li>Open-source data generation &amp; leaderboard</li>
           </ul>
-          <p class="muted" style="font-size:.85rem;margin-top:10px">Physics stays at nominal values: fixed masses, friction, restitution, damping, geometry, level table.</p>
+          <p class="muted" style="font-size:.85rem;margin-top:10px">Physics stays at nominal values: fixed mass, friction, restitution, damping, level table.</p>
         </div>
         <div class="vs-card vs-new">
-          <span class="tag">THIS WORK</span>
-          <h4>Physical randomization</h4>
+          <span class="tag">THIS WORK · ROBOTWIN-PHYS</span>
+          <h4>Physical diversity</h4>
           <ul>
-            <li>Contact: friction, restitution, damping</li>
-            <li>Object: mass, center of mass, geometry</li>
-            <li>Workspace: tilt, height, external force</li>
-            <li>Sensor: camera distance &amp; angle</li>
+            <li>13 physical factors — object, contact, damping, environment, camera</li>
+            <li>Single-factor &amp; compositional multi-factor disturbances</li>
+            <li>Per-episode ground-truth physical parameters</li>
+            <li>Open-source benchmark: dataset, evaluation, baselines</li>
           </ul>
-          <p class="muted" style="font-size:.85rem;margin-top:10px">Every factor is sampled continuously per episode and labeled with exact ground-truth values.</p>
+          <p class="muted" style="font-size:.85rem;margin-top:10px">Every factor is continuously sampled per episode, exactly reproducible by seed, and verified feasible by the expert planner.</p>
         </div>
+      </div>
+      <div class="chips" style="justify-content:center;margin-top:18px">
+        <span class="chip">🌐 Realistic Physics · visual → physical diversity</span>
+        <span class="chip">🧩 Compositional Disturbances · single + multi factor</span>
+        <span class="chip">📦 Open-source Benchmark · dataset · evaluation · baselines</span>
+        <span class="chip">🌍 Physical Generalization · understand physics, adapt to the real world</span>
       </div>
 
       <div class="prose" style="margin-top:26px">
@@ -294,10 +298,11 @@
         <p>
           <b>Factor selection is grounded in deployment reality.</b> Each of the 13 factors maps to a
           routine, well-documented deployment event — a waxed tabletop, a half-filled bottle, an aging
-          hinge, a bumped camera mount — rather than an arbitrary parameter sweep. Factors are grouped by
-          where they act: <b>contact</b> (friction, restitution, joint dampings), <b>object</b> (mass,
-          center of mass, geometry scale), <b>workspace</b> (table tilt, table height, external force),
-          and <b>sensor</b> (camera distance, camera angle).
+          hinge, a bumped camera mount — rather than an arbitrary parameter sweep. The factors group
+          into five families: <b>object properties</b> (mass, center of mass, geometry scale),
+          <b>contact properties</b> (friction, restitution), <b>damping properties</b> (object, arm, and
+          gripper joint damping), <b>task environment</b> (table tilt, table height, external force), and
+          <b>camera configuration</b> (camera distance, camera angle).
         </p>
         <p>
           <b>Continuous, episode-level sampling.</b> The 13 attributes are sampled independently at
@@ -364,22 +369,6 @@
           <div class="fc-cap">🚪 Aged joint damping — the drawer barely opens.</div>
         </div>
       </div>
-
-      <div class="prose" style="margin:34px auto 0">
-        <div class="kicker">What we observe</div>
-        <ul class="obs-list" style="margin-top:4px">
-          <li><b>A substantial robustness gap.</b> Models that barely drop under RoboTwin 2.0's official
-            visual randomization lose 30–50 success points once physical conditions are sampled:
-            Fast-WAM falls from 91.8% (Official Random) to 44.2% under Physical Random.</li>
-          <li><b>The gap holds across model families.</b> WAMs (Fast-WAM, Motus, FACT) and VLAs (π0.5)
-            all degrade markedly, and their per-task success rates strongly correlate (Pearson
-            0.75–0.81) — the challenge is not tied to any particular architecture.</li>
-          <li><b>Failures are structured, not random.</b> Hard tasks — beat_block_hammer,
-            pick_diverse_bottles, move_stapler_pad, place_can_basket, put_bottles_dustbin — concentrate
-            on contact-, load-, and articulation-sensitive behaviors, while grab_roller, shake_bottle,
-            and place_container_plate remain relatively robust.</li>
-        </ul>
-      </div>
     </div>
   </section>
 
@@ -403,31 +392,11 @@
         <tr><th>Component</th><th>Content</th><th>Format</th></tr>
         <tr><td>Trajectories</td><td>Actions, states, and camera streams for every episode</td><td>HDF5 (official RoboTwin format)</td></tr>
         <tr><td>Videos</td><td>Corresponding MP4 recordings</td><td>MP4</td></tr>
-        <tr><td>phys_meta</td><td>The 13 physical attributes instantiated for each episode</td><td>JSON, per episode</td></tr>
+        <tr><td>phys_meta</td><td>The 13 physical attributes instantiated for the episode</td><td>JSON, per episode</td></tr>
         <tr><td>Manifest</td><td>Mapping between tasks, benchmark configurations, and episode counts</td><td>Included in the release</td></tr>
-      </table>
-      <h3 class="sec">Signals beyond RGB video</h3>
-      <div class="prose">
-        <p>
-          Every episode ships with more than RGB video: the exact physical condition that governed the
-          rollout. This explicit correspondence between observations, actions, and physical conditions
-          turns physical diversity into a reusable learning signal — supporting physical-attribute
-          estimation, condition-aware representation learning, and policy training conditioned on
-          physical attributes.
-        </p>
-      </div>
-      <table class="detail">
-        <tr><th>Signal</th><th>Content</th><th>Granularity</th></tr>
-        <tr><td>Physical ground truth</td><td>Values of the 13 sampled attributes in effect during the episode (mass, CoM, geometry, tilt, height, force, camera, friction, restitution, damping ×3)</td><td>per episode</td></tr>
-        <tr><td>Episode seed</td><td>Determines the sampling stream — any condition can be reproduced exactly</td><td>per episode</td></tr>
-        <tr><td>Task configuration</td><td>Global domain, or dedicated calibrated domain for the 9 physics-sensitive tasks</td><td>per task</td></tr>
-        <tr><td>Feasibility</td><td>Expert planner verified the episode executable under its physical condition</td><td>per episode</td></tr>
       </table>
 
       <h3 class="sec">Label schema &amp; collection protocol</h3>
-      <div class="prose">
-        <p>Every episode carries the following schema:</p>
-      </div>
       <div class="schema">episode ↔ seed | 13-dim physical attributes (mass, CoM, geometry scale, table tilt, table height, external force, camera mode &amp; magnitude, friction, restitution, object / arm / gripper damping) | task configuration (global / dedicated) | expert-verified feasibility</div>
       <div class="prose" style="margin-top:16px">
         <p>
